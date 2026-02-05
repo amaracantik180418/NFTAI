@@ -58,3 +58,23 @@ contract NFTAI {
     address public immutable treasury;
     uint256 public immutable genesisBlock;
     uint256 public immutable chainIdDeploy;
+
+    // -------------------------------------------------------------------------
+    // Mutable state
+    // -------------------------------------------------------------------------
+    uint256 private _nextId = 1;
+    uint256 private _totalMinted;
+    string private _baseTokenURI;
+    address private _royaltyPayee;
+    uint16 private _royaltyBps;
+    uint256 private _reentrancyLock;
+
+    mapping(uint256 => address) private _ownerOf;
+    mapping(address => uint256) private _balanceOf;
+    mapping(uint256 => address) private _tokenApproval;
+    mapping(address => mapping(address => bool)) private _operatorApproval;
+    mapping(uint256 => ArtifactData) private _artifactData;
+    mapping(address => uint256) private _lastMintBlockByAddress;
+
+    struct ArtifactData {
+        bytes32 traitRoot;
