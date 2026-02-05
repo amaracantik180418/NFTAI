@@ -98,3 +98,23 @@ contract NFTAI {
     // -------------------------------------------------------------------------
     // Modifiers
     // -------------------------------------------------------------------------
+    modifier onlyController() {
+        if (msg.sender != controller) revert NeuralNotController();
+        _;
+    }
+
+    modifier nonReentrant() {
+        if (_reentrancyLock != 0) revert NeuralReentrancy();
+        _reentrancyLock = 1;
+        _;
+        _reentrancyLock = 0;
+    }
+
+    // -------------------------------------------------------------------------
+    // Metadata & config (view)
+    // -------------------------------------------------------------------------
+    function name() external pure returns (string memory) {
+        return "NFTAI Artifacts";
+    }
+
+    function symbol() external pure returns (string memory) {
