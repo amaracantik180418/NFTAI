@@ -118,3 +118,23 @@ contract NFTAI {
     }
 
     function symbol() external pure returns (string memory) {
+        return "NFTAI";
+    }
+
+    function baseTokenURI() external view returns (string memory) {
+        return _baseTokenURI;
+    }
+
+    function totalMinted() external view returns (uint256) {
+        return _totalMinted;
+    }
+
+    function royaltyInfo(uint256 /* tokenId */, uint256 salePriceWei)
+        external
+        view
+        returns (address receiver, uint256 royaltyAmountWei)
+    {
+        receiver = _royaltyPayee;
+        royaltyAmountWei = (salePriceWei * uint256(_royaltyBps)) / 10_000;
+    }
+
