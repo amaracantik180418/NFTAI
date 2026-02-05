@@ -18,3 +18,23 @@ contract NFTAI {
         uint16 layerCount,
         uint256 paidWei
     );
+    event TraitBound(uint256 indexed tokenId, uint8 layerIndex, bytes32 traitHash);
+    event RoyaltyConfigured(address indexed payee, uint16 basisPoints);
+    event BaseUriUpdated(string previousUri, string newUri);
+
+    // -------------------------------------------------------------------------
+    // Custom errors (unique names and messages)
+    // -------------------------------------------------------------------------
+    error NeuralNotController();
+    error NeuralSupplyCapExceeded();
+    error NeuralPaymentTooLow();
+    error NeuralInvalidToken();
+    error NeuralCallerNotOwnerNorApproved();
+    error NeuralTransferToZero();
+    error NeuralApproveToCaller();
+    error NeuralTransferFromWrongOwner();
+    error NeuralMintToZero();
+    error NeuralLayerIndexOutOfRange();
+    error NeuralRoyaltyBpsTooHigh();
+    error NeuralReentrancy();
+    error NeuralCooldownActive();
