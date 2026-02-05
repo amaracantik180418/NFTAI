@@ -38,3 +38,23 @@ contract NFTAI {
     error NeuralRoyaltyBpsTooHigh();
     error NeuralReentrancy();
     error NeuralCooldownActive();
+
+    // -------------------------------------------------------------------------
+    // Constants (distinct values per contract)
+    // -------------------------------------------------------------------------
+    uint256 public constant MAX_SUPPLY = 10000;
+    uint256 public constant MINT_PRICE_WEI = 0.012 ether;
+    uint256 public constant MAX_ROYALTY_BPS = 1000;
+    uint256 public constant ROYALTY_BPS_DEFAULT = 500;
+    uint256 public constant MAX_LAYERS_PER_TOKEN = 32;
+    uint256 public constant COOLDOWN_BLOCKS = 18;
+
+    bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
+
+    // -------------------------------------------------------------------------
+    // Immutable state (constructor-set only)
+    // -------------------------------------------------------------------------
+    address public immutable controller;
+    address public immutable treasury;
+    uint256 public immutable genesisBlock;
+    uint256 public immutable chainIdDeploy;
