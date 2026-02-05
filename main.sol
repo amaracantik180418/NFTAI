@@ -78,3 +78,23 @@ contract NFTAI {
 
     struct ArtifactData {
         bytes32 traitRoot;
+        uint16 layerCount;
+        uint64 mintedAt;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructor (no args required; roles set to deployer)
+    // -------------------------------------------------------------------------
+    constructor() {
+        controller = msg.sender;
+        treasury = msg.sender;
+        _royaltyPayee = msg.sender;
+        _royaltyBps = uint16(ROYALTY_BPS_DEFAULT);
+        genesisBlock = block.number;
+        chainIdDeploy = block.chainid;
+        _baseTokenURI = "ipfs://bafybeiaq7kh2vxeqnm4n2oq5r7k6f3m2p9s1t4u5v6w7x8y9z0a1b2c3d4e5f6/";
+    }
+
+    // -------------------------------------------------------------------------
+    // Modifiers
+    // -------------------------------------------------------------------------
