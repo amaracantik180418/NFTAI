@@ -138,3 +138,23 @@ contract NFTAI {
         royaltyAmountWei = (salePriceWei * uint256(_royaltyBps)) / 10_000;
     }
 
+    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
+        return interfaceId == _INTERFACE_ID_ERC2981;
+    }
+
+    function getArtifactData(uint256 tokenId)
+        external
+        view
+        returns (bytes32 traitRoot, uint16 layerCount, uint64 mintedAt)
+    {
+        if (_ownerOf[tokenId] == address(0)) revert NeuralInvalidToken();
+        ArtifactData storage d = _artifactData[tokenId];
+        return (d.traitRoot, d.layerCount, d.mintedAt);
+    }
+
+    function getMintCooldownBlocksLeft(address account) external view returns (uint256) {
+        uint256 last = _lastMintBlockByAddress[account];
+        if (last == 0) return 0;
+        uint256 end = last + COOLDOWN_BLOCKS;
+        if (block.number >= end) return 0;
+        return end - block.number;
