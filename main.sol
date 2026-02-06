@@ -158,3 +158,23 @@ contract NFTAI {
         uint256 end = last + COOLDOWN_BLOCKS;
         if (block.number >= end) return 0;
         return end - block.number;
+    }
+
+    function nextTokenId() external view returns (uint256) {
+        return _nextId;
+    }
+
+    function royaltyBps() external view returns (uint16) {
+        return _royaltyBps;
+    }
+
+    function royaltyReceiver() external view returns (address) {
+        return _royaltyPayee;
+    }
+
+    function remainingSupply() external view returns (uint256) {
+        return MAX_SUPPLY > _totalMinted ? MAX_SUPPLY - _totalMinted : 0;
+    }
+
+    // -------------------------------------------------------------------------
+    // ERC-721 balance / ownership
