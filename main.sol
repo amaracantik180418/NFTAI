@@ -238,3 +238,23 @@ contract NFTAI {
         emit Transfer(address(0), to, tokenId);
         emit ArtifactMinted(to, tokenId, traitRoot, layerCount, msg.value);
     }
+
+    // -------------------------------------------------------------------------
+    // Approvals
+    // -------------------------------------------------------------------------
+    function approve(address spender, uint256 tokenId) external {
+        address owner = ownerOf(tokenId);
+        if (spender == owner) revert NeuralApproveToCaller();
+        if (msg.sender != owner && !_operatorApproval[owner][msg.sender]) revert NeuralCallerNotOwnerNorApproved();
+        _tokenApproval[tokenId] = spender;
+        emit Approval(owner, spender, tokenId);
+    }
+
+    function setApprovalForAll(address operator, bool approved) external {
+        if (operator == msg.sender) revert NeuralApproveToCaller();
+        _operatorApproval[msg.sender][operator] = approved;
+        emit ApprovalForAll(msg.sender, operator, approved);
+    }
+
+    // -------------------------------------------------------------------------
+    // Transfers
