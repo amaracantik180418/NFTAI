@@ -198,3 +198,23 @@ contract NFTAI {
     function isApprovedForAll(address owner, address operator) external view returns (bool) {
         return _operatorApproval[owner][operator];
     }
+
+    // -------------------------------------------------------------------------
+    // Mint (payable, with cooldown and supply cap)
+    // -------------------------------------------------------------------------
+    function mint(address to, bytes32 traitRoot, uint16 layerCount) external payable nonReentrant {
+        if (to == address(0)) revert NeuralMintToZero();
+        if (_totalMinted >= MAX_SUPPLY) revert NeuralSupplyCapExceeded();
+        if (msg.value < MINT_PRICE_WEI) revert NeuralPaymentTooLow();
+        if (layerCount > MAX_LAYERS_PER_TOKEN) revert NeuralLayerIndexOutOfRange();
+
+        uint256 lastBlock = _lastMintBlockByAddress[msg.sender];
+        if (lastBlock != 0 && block.number < lastBlock + COOLDOWN_BLOCKS) {
+            revert NeuralCooldownActive();
+        }
+        _lastMintBlockByAddress[msg.sender] = block.number;
+
+        uint256 tokenId = _nextId;
+        _nextId += 1;
+        _totalMinted += 1;
+
