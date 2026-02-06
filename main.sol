@@ -218,3 +218,23 @@ contract NFTAI {
         _nextId += 1;
         _totalMinted += 1;
 
+        _ownerOf[tokenId] = to;
+        _balanceOf[to] += 1;
+        _artifactData[tokenId] = ArtifactData({
+            traitRoot: traitRoot,
+            layerCount: layerCount,
+            mintedAt: uint64(block.timestamp)
+        });
+
+        (bool sent,) = treasury.call{value: msg.value}("");
+        if (!sent) {
+            _ownerOf[tokenId] = address(0);
+            _balanceOf[to] -= 1;
+            _totalMinted -= 1;
+            _nextId -= 1;
+            revert NeuralPaymentTooLow();
+        }
+
+        emit Transfer(address(0), to, tokenId);
+        emit ArtifactMinted(to, tokenId, traitRoot, layerCount, msg.value);
+    }
