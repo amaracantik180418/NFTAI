@@ -178,3 +178,23 @@ contract NFTAI {
 
     // -------------------------------------------------------------------------
     // ERC-721 balance / ownership
+    // -------------------------------------------------------------------------
+    function balanceOf(address owner) external view returns (uint256) {
+        if (owner == address(0)) revert NeuralTransferToZero();
+        return _balanceOf[owner];
+    }
+
+    function ownerOf(uint256 tokenId) public view returns (address) {
+        address owner = _ownerOf[tokenId];
+        if (owner == address(0)) revert NeuralInvalidToken();
+        return owner;
+    }
+
+    function getApproved(uint256 tokenId) external view returns (address) {
+        if (_ownerOf[tokenId] == address(0)) revert NeuralInvalidToken();
+        return _tokenApproval[tokenId];
+    }
+
+    function isApprovedForAll(address owner, address operator) external view returns (bool) {
+        return _operatorApproval[owner][operator];
+    }
